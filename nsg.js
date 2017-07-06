@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-var nsgData = require('./nsg.json');
-var subnetData = require('./subnets.json');
+var nsgData = require('./data/nsg.json');
+var subnetData = require('./data/subnets.json');
 
 var nsgMap = nsgData.reduce(function(acc, nsg) {
   acc[nsg.id] = nsg;
