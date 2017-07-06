@@ -1,0 +1,11 @@
+{
+  "name": "azure-nsg-diagrams",
+  "version": "1.0.0",
+  "description": "generate azure network security diagrams from deployments",
+  "main": "nsg.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ed Sweeney",
+  "license": "UNLICENSED"
+}
