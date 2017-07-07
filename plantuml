@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+#java -jar $HOME/bin/plantuml-8058-SNAPSHOT.jar $@
+java -jar $HOME/bin/plantuml-1.2017.15-SNAPSHOT.jar $@
+
