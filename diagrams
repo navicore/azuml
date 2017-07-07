@@ -5,8 +5,9 @@ cd "$(dirname "$0")"
 rm -rf ../out/*
 mkdir -p ../out
 
-./src/nsg-deployment-diagram.js > out/nsg-deployment-diagram.uml
-./plantuml out/nsg-deployment-diagram.uml
+#./src/nsg-deployment-diagram.js > out/nsg-deployment-diagram.uml
+#./plantuml out/nsg-deployment-diagram.uml
+
 ./src/nsg-sequence-diagram.js > out/nsg-sequence-diagram.uml
 ./plantuml out/nsg-sequence-diagram.uml
 
