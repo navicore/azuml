@@ -1,5 +1,7 @@
 # Logs
+main.jsx.js
 .DS_Store
+bin/
 out/
 logs
 *.log

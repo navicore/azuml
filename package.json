@@ -2,10 +2,24 @@
   "name": "azure-nsg-diagrams",
   "version": "1.0.0",
   "description": "generate azure network security diagrams from deployments",
-  "main": "nsg.js",
+  "main": "src/main.js",
   "scripts": {
+    "transpile": "mkdir -p bin && node_modules/.bin/babel src/main.js --out-file bin/jsx.js",
+    "shebang": "echo '#!/usr/bin/env node\n' $(cat bin/jsx.js) > main.jsx.js",
+    "clean": "rm -f bin/jsx.js main.jsx.js",
+    "prepack": "npm run clean && npm run transpile && npm run shebang",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "azuml": "main.jsx.js"
+  },
   "author": "Ed Sweeney",
-  "license": "UNLICENSED"
+  "license": "MIT",
+  "dependencies": {
+    "ink": "^0.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1"
+  }
 }
