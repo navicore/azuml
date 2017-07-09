@@ -5,17 +5,18 @@
   "main": "src/main.js",
   "scripts": {
     "transpile": "node_modules/.bin/babel src/main.js --out-file jsx.js",
-    "shebang": "echo '#!/usr/bin/env node\n' $(cat jsx.js) > main.jsx.js",
-    "clean": "rm -f jsx.js main.jsx.js",
+    "shebang": "echo '#!/usr/bin/env node\n' $(cat jsx.js) > script.js",
+    "clean": "rm -f jsx.js script.js",
     "prepack": "npm run clean && npm run transpile && npm run shebang",
     "test": "echo \"warning: no test specified\" && exit 0"
   },
   "bin": {
-    "azuml": "main.jsx.js"
+    "azuml": "script.js"
   },
   "author": "Ed Sweeney",
   "license": "MIT",
   "dependencies": {
+    "commander": "^2.11.0",
     "ink": "^0.1.1"
   },
   "devDependencies": {
