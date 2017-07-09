@@ -17,7 +17,8 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.11.0",
-    "ink": "^0.1.1"
+    "ink": "^0.1.1",
+    "ms-rest-azure": "^2.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

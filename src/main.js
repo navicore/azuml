@@ -21,6 +21,40 @@ if (!program.subscription || !program.clientId || !program.secret) {
   program.help()
 }
 
+class Launcher extends Component {
+	constructor() {
+		super();
+    this.state = {
+      i: 0,
+			msg: ''
+		};
+	}
+
+	render() {
+    return (
+      <div>
+        <Text green>
+          {this.state.msg}
+        </Text>
+        <Counter/>
+      </div>
+		);
+	}
+
+  componentDidMount() {
+		this.timer = setInterval(() => {
+      this.setState({
+				i: this.state.i + 1,
+        msg: this.state.i + ' mounting...'
+      });
+		}, 1000);
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.timer);
+	}
+}
+
 class Counter extends Component {
 	constructor() {
 		super();
@@ -50,5 +84,6 @@ class Counter extends Component {
 		clearInterval(this.timer);
 	}
 }
-mount(<Counter/>, process.stdout);
+
+mount(<Launcher></Launcher>, process.stdout);
 
