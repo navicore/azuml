@@ -82,6 +82,7 @@ const makeConnections = (vnet, nsgMap, subnetMap, pipMap, lbMap) => {
   Object.values(pipMap).forEach((pip) => {
     const id = makeDiagId(pip.id)
     result += `user1 -> ${id} : ports???\n`
+    result += `user2 -> ${id} : ports???\n`
   })
 
   return result
