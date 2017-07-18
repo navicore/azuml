@@ -1,47 +1,46 @@
 #!/usr/bin/env node
 
-var nsgData = require('../data/nsg.json')
-var subnetData = require('../data/subnets.json')
+const make = (nsgMap, subnetMap) => {
 
-var nsgMap = nsgData.reduce(function(acc, nsg) {
-  acc[nsg.id] = nsg;
-  return acc;
-}, {})
+  var result = ""
+  result += "@startuml\n"
 
-const makeRoot = (subnet, seq) => {
-const diagram = `
-cloud "${subnet.name}" as cloud1${seq} {
-  interface "interface1${seq}" as interface1${seq}
-}
-`
-  console.log(diagram)
-}
-
-const makeDiagram = (rootSeq, peerSubnet, seq) => {
-const diagram = `
-cloud "${peerSubnet.name}" as cloud2${seq} {
-  interface "interface2${seq}" as interface2${seq}
-}
-interface1${rootSeq} -(0- interface2${seq}
-`
-  console.log(diagram)
-}
-
-var seq = 0
-subnetData.forEach(
-  (subnet) => {
-    console.log(`@startuml`)
-    makeRoot(subnet, ++seq)
-    const rootSeq = seq
-    subnetData.forEach(
-      (peerSubnet) => {
-        if (subnet.id === peerSubnet.id) return
-        makeDiagram(rootSeq, peerSubnet, seq++)
-      }
-    )
-    console.log(`@enduml`)
+  const makeRoot = (subnet, seq) => {
+  const diagram = `
+  cloud "${subnet.name}" as cloud1${seq} {
+    interface "interface1${seq}" as interface1${seq}
   }
-)
+  `
+    result += `${diagram}\n`
+  }
 
-//console.log( `subnet ${subnet.name} uses ${nsgMap[subnet.networkSecurityGroup.id].name}` )
+  const makeDiagram = (rootSeq, peerSubnet, seq) => {
+  const diagram = `
+  cloud "${peerSubnet.name}" as cloud2${seq} {
+    interface "interface2${seq}" as interface2${seq}
+  }
+  interface1${rootSeq} -(0- interface2${seq}
+  `
+    result += `${diagram}\n`
+  }
+
+  var seq = 0
+  Object.values(subnetMap).forEach(
+    (subnet) => {
+      makeRoot(subnet, ++seq)
+      const rootSeq = seq
+      Object.values(subnetMap).forEach(
+        (peerSubnet) => {
+          if (subnet.id === peerSubnet.id) return
+          makeDiagram(rootSeq, peerSubnet, seq++)
+        }
+      )
+    }
+  )
+
+  result += "\n@enduml\n"
+  return result
+}
+
+exports["default"] = make
 
