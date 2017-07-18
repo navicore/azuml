@@ -45,7 +45,6 @@ const azurePrivateNetBox = (vnet, subnetMap) => {
 box "Private Azure VNET ${vnet.name}" #LightBlue
 
 `
-
   Object.values(subnetMap).forEach((subnet) => {
 
     const snid = makeDiagId(subnet.name)
@@ -55,10 +54,38 @@ box "Private Azure VNET ${vnet.name}" #LightBlue
 
   result += `
 end box
+
 `
   return result
 }
 
+const deActivateLbs = (lbMap) => {
+  var result = ""
+  Object.values(lbMap).forEach((lb) => {
+    const id = makeDiagId(lb.id)
+    result += `deactivate ${id}\n`
+  })
+  return result
+}
+const activateLbs = (lbMap) => {
+  var result = ""
+
+  Object.values(lbMap).forEach((lb) => {
+    const id = makeDiagId(lb.id)
+    result += `activate ${id}\n`
+  })
+  return result
+}
+
+const makeConnections = (vnet, nsgMap, subnetMap, pipMap, lbMap) => {
+  var result = ""
+  Object.values(pipMap).forEach((pip) => {
+    const id = makeDiagId(pip.id)
+    result += `user1 -> ${id} : ports???\n`
+  })
+
+  return result
+}
 
 const make = (vnet, nsgMap, subnetMap, pipMap, lbMap) => {
 
@@ -69,40 +96,9 @@ const make = (vnet, nsgMap, subnetMap, pipMap, lbMap) => {
   result += azurePublicBoundryBox(pipMap, lbMap)
   result += azurePrivateNetBox(vnet, subnetMap)
 
-  /*
-  const makeRoot = (subnet, seq) => {
-  const diagram = `
-  cloud "${subnet.name}" as cloud1${seq} {
-    interface "interface1${seq}" as interface1${seq}
-  }
-  `
-    //result += `${diagram}\n`
-  }
-
-  const makeDiagram = (rootSeq, peerSubnet, seq) => {
-  const diagram = `
-  cloud "${peerSubnet.name}" as cloud2${seq} {
-    interface "interface2${seq}" as interface2${seq}
-  }
-  interface1${rootSeq} -(0- interface2${seq}
-  `
-    //result += `${diagram}\n`
-  }
-
-  var seq = 0
-  Object.values(subnetMap).forEach(
-    (subnet) => {
-      makeRoot(subnet, ++seq)
-      const rootSeq = seq
-      Object.values(subnetMap).forEach(
-        (peerSubnet) => {
-          if (subnet.id === peerSubnet.id) return
-          makeDiagram(rootSeq, peerSubnet, seq++)
-        }
-      )
-    }
-  )
-  */
+  result += activateLbs(lbMap)
+  result += makeConnections(vnet, nsgMap, subnetMap, pipMap, lbMap)
+  result += deActivateLbs(lbMap)
 
   result += "\n@enduml\n"
   return result
