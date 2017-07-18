@@ -2,6 +2,7 @@ const fs = require('fs')
 const program = require('commander')
 const armMeta = require('./armMeta').default
 const diagram = require('./nsg-sequence-diagram').default
+const { exec } = require('child_process');
 
 program
   .option('-g, --group [group]', 'set resource group [REQUIRED]')
@@ -36,7 +37,10 @@ armMeta(program.group).then((result) => {
   //console.log(d)
   fs.mkdir("out", () => {
     fs.writeFile(`out/seq-${program.group}.uml`, d, function (err) {
-     if(err) throw new Error(err); 
+      if(err) throw new Error(err); 
+      exec(`./bin/plantuml out/seq-${program.group}.uml`, (err, stdout, stderr) => {
+        if(err) throw new Error(err); 
+      });
     })
   })
 }).catch((err) => {
