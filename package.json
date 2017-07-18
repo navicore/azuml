@@ -19,7 +19,8 @@
     "azure-arm-network": "^2.0.0",
     "commander": "^2.11.0",
     "ink": "^0.1.1",
-    "ms-rest-azure": "^2.2.1"
+    "ms-rest-azure": "^2.2.1",
+    "shorthash": "0.0.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

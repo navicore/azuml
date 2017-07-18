@@ -10,6 +10,11 @@ const armMeta = (resourceGroup) => {
 
   const apiVersion = "2016-09-01"
 
+  const vnetUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/virtualnetworks?api-version=${apiVersion}`
+  const nsgUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/networkSecurityGroups?api-version=${apiVersion}`
+  const pipUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/publicIPAddresses?api-version=${apiVersion}`
+  const lbUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/loadBalancers?api-version=${apiVersion}`
+
   const listResources = (url) => msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
     client = new AzureServiceClient(creds);
     let options = {
@@ -23,35 +28,48 @@ const armMeta = (resourceGroup) => {
   })
 
   const vnets = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    const url = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/virtualnetworks?api-version=${apiVersion}`
-    return listResources(url)
+    return listResources(vnetUrl)
   })
 
   const nsgs = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    const url = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/networkSecurityGroups?api-version=${apiVersion}`
-    return listResources(url)
+    return listResources(nsgUrl)
   })
 
-  return Promise.all([vnets, nsgs]).then((results) => {
+  const pips = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
+    return listResources(pipUrl)
+  })
+
+  const lbs = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
+    return listResources(lbUrl)
+  })
+
+  return Promise.all([vnets, nsgs, pips, lbs]).then((results) => {
 
     if (results[0].value.length !== 1) throw Error('Resource group must have a single VirtualNetowrk.')
 
-    var vnetMap = results[0].value.reduce(function(acc, nsg) {
-      acc[nsg.id] = nsg;
+    var vnet = results[0].value[0]
+
+    var subnetMap = results[0].value[0].properties.subnets.reduce(function(acc, o) {
+      acc[o.id] = o;
       return acc;
     }, {});
 
-    var subnetMap = results[0].value[0].properties.subnets.reduce(function(acc, nsg) {
-      acc[nsg.id] = nsg;
+    var nsgMap = results[1].value.reduce(function(acc, o) {
+      acc[o.id] = o;
       return acc;
     }, {});
 
-    var nsgMap = results[1].value.reduce(function(acc, nsg) {
-      acc[nsg.id] = nsg;
+    var pipMap = results[2].value.reduce(function(acc, o) {
+      acc[o.id] = o;
       return acc;
     }, {});
 
-    return {vnetMap, subnetMap, nsgMap}
+    var lbMap = results[3].value.reduce(function(acc, o) {
+      acc[o.id] = o;
+      return acc;
+    }, {});
+
+    return {vnet, subnetMap, nsgMap, pipMap, lbMap}
 
   })
 }
