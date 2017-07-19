@@ -21,6 +21,7 @@ const connectCidSubnets = (rule, armData, id) => {
 }
 
 const connectFromInternet = (rule, armData, id) => {
+  console.log(JSON.stringify(armData.lbMap, 0, 2))
   console.log(`todo: allow from inet`)
   var result = ""
   return result

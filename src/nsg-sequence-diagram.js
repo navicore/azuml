@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const sh = require('shorthash')
 const makeSubnetConnections = require('./connections/MakeSubnetConnections').default
-const makeLbConnections = require('./connections/MakeLbConnections').default
 const makePipConnections = require('./connections/MakePipConnections').default
 
 const inetBox = () => {
@@ -92,7 +91,6 @@ const make = (armData) => {
   result += activateLbs(armData.lbMap)
 
   result += makePipConnections(armData)
-  result += makeLbConnections(armData)
   result += makeSubnetConnections(armData)
 
   result += deActivateLbs(armData.lbMap)
