@@ -1,10 +1,23 @@
 create diagrams for Azure subnets and NSGs
 ----
 
-add data to data, see `data/README.md`
+# PREREQS
 
-run `npm install`
-run `node src/script.js -g SOME-RESOURCE-GROUP`
+node >= v7
+
+# INSTALL
+
+```console
+npm install -g https://github.com/navicore/azuml.git
+```
+
+# USAGE
+
+run command with no args to get help
+
+```console
+azuml
+```
 
 png files and their source are created in `./out`
 
