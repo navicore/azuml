@@ -14,6 +14,7 @@ const armMeta = (resourceGroup) => {
   const nsgUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/networkSecurityGroups?api-version=${apiVersion}`
   const pipUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/publicIPAddresses?api-version=${apiVersion}`
   const lbUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/loadBalancers?api-version=${apiVersion}`
+  const nicUrl = `https://management.azure.com/subscriptions/${subscriptionId}/resourceGroups/${resourceGroup}/providers/Microsoft.Network/networkInterfaces?api-version=${apiVersion}`
 
   const listResources = (url) => msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
     client = new AzureServiceClient(creds);
@@ -43,7 +44,11 @@ const armMeta = (resourceGroup) => {
     return listResources(lbUrl)
   })
 
-  return Promise.all([vnets, nsgs, pips, lbs]).then((results) => {
+  const nics = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
+    return listResources(nicUrl)
+  })
+
+  return Promise.all([vnets, nsgs, pips, lbs, nics]).then((results) => {
 
     if (results[0].value.length !== 1) throw Error('Resource group must have a single VirtualNetowrk.')
 
@@ -74,7 +79,12 @@ const armMeta = (resourceGroup) => {
       return acc;
     }, {});
 
-    return {vnet, subnetMap, nsgMap, pipMap, lbMap, subnetByCidMap}
+    var nicMap = results[4].value.reduce(function(acc, o) {
+      acc[o.id] = o;
+      return acc;
+    }, {});
+
+    return {vnet, subnetMap, nsgMap, pipMap, lbMap, subnetByCidMap, nicMap}
 
   })
 }
