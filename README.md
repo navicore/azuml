@@ -1,9 +1,12 @@
-create diagrams for Azure subnets and NSGs
+Diagram Generator for Azure Subnets and NSGs
 ----
+
+Create diagrams based on ARM API calls of your deployed Azure network.
 
 ## PREREQS
 
-node >= v7
+* node >= v7
+* Azure service principal
 
 ## INSTALL
 
