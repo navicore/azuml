@@ -1,8 +1,8 @@
 {
-  "name": "azure-nsg-diagrams",
+  "name": "azuml",
   "version": "1.0.0",
   "description": "generate azure network security diagrams from deployments",
-  "main": "src/main.js",
+  "main": "src/script.js",
   "scripts": {
     "test": "echo \"warning: no test specified\" && exit 0"
   },
