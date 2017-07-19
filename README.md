@@ -1,17 +1,17 @@
 create diagrams for Azure subnets and NSGs
 ----
 
-# PREREQS
+## PREREQS
 
 node >= v7
 
-# INSTALL
+## INSTALL
 
 ```console
 npm install -g https://github.com/navicore/azuml.git
 ```
 
-# USAGE
+## USAGE
 
 run command with no args to get help
 
@@ -21,7 +21,7 @@ azuml
 
 png files and their source are created in `./out`
 
-# TODOs
+## TODOs
 
 * walk LBs to figure out connections from public
 * walk PIPs to figure out connections from public
