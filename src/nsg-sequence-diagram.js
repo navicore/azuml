@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-var sh = require('shorthash');
+const sh = require('shorthash')
+const makeSubnetConnections = require('./connections/MakeSubnetConnections').default
+const makeLbConnections = require('./connections/MakeLbConnections').default
+const makePipConnections = require('./connections/MakePipConnections').default
 
 const inetBox = () => {
-  var result = `
+  let result = `
 box "Internet" #LightGreen
   actor "User App User" as user2
   actor "DEVOPS eng" as user1
@@ -16,7 +19,7 @@ const makeDiagId = (id) => {
 }
 
 const azurePublicBoundryBox = (pipMap, lbMap) => {
-  var result = `
+  let result = `
 box "Azure Internet Boundary" #White
 
 `
@@ -41,7 +44,7 @@ end box
 }
 
 const azurePrivateNetBox = (vnet, subnetMap) => {
-  var result = `
+  let result = `
 box "Private Azure VNET ${vnet.name}" #LightBlue
 
 `
@@ -60,7 +63,7 @@ end box
 }
 
 const deActivateLbs = (lbMap) => {
-  var result = ""
+  let result = ""
   Object.values(lbMap).forEach((lb) => {
     const id = makeDiagId(lb.id)
     result += `deactivate ${id}\n`
@@ -68,7 +71,7 @@ const deActivateLbs = (lbMap) => {
   return result
 }
 const activateLbs = (lbMap) => {
-  var result = ""
+  let result = ""
 
   Object.values(lbMap).forEach((lb) => {
     const id = makeDiagId(lb.id)
@@ -77,29 +80,22 @@ const activateLbs = (lbMap) => {
   return result
 }
 
-const makeConnections = (vnet, nsgMap, subnetMap, pipMap, lbMap) => {
-  var result = ""
-  Object.values(pipMap).forEach((pip) => {
-    const id = makeDiagId(pip.id)
-    result += `user1 -> ${id} : ports???\n`
-    result += `user2 -> ${id} : ports???\n`
-  })
+const make = (armData) => {
 
-  return result
-}
-
-const make = (vnet, nsgMap, subnetMap, pipMap, lbMap) => {
-
-  var result = ""
+  let result = ""
   result += "@startuml\n"
 
   result += inetBox()
-  result += azurePublicBoundryBox(pipMap, lbMap)
-  result += azurePrivateNetBox(vnet, subnetMap)
+  result += azurePublicBoundryBox(armData.pipMap, armData.lbMap)
+  result += azurePrivateNetBox(armData.vnet, armData.subnetMap)
 
-  result += activateLbs(lbMap)
-  result += makeConnections(vnet, nsgMap, subnetMap, pipMap, lbMap)
-  result += deActivateLbs(lbMap)
+  result += activateLbs(armData.lbMap)
+
+  result += makePipConnections(armData)
+  result += makeLbConnections(armData)
+  result += makeSubnetConnections(armData)
+
+  result += deActivateLbs(armData.lbMap)
 
   result += "\n@enduml\n"
   return result
