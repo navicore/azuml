@@ -50,7 +50,7 @@ box "Private Azure VNET ${vnet.name}" #LightBlue
 `
   Object.values(subnetMap).forEach((subnet) => {
 
-    const snid = makeDiagId(subnet.name)
+    const snid = makeDiagId(subnet.id)
     result += `  collections "${subnet.name} \\nSubnet" as ${snid}\n`
 
   })

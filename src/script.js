@@ -34,7 +34,6 @@ if (!program.group ||
 
 armMeta(program.group).then((result) => {
   const d = diagram(result)
-  //console.log(d)
   fs.mkdir("out", () => {
     fs.writeFile(`out/seq-${program.group}.uml`, d, function (err) {
       if(err) throw new Error(err); 

@@ -49,6 +49,11 @@ const armMeta = (resourceGroup) => {
 
     var vnet = results[0].value[0]
 
+    var subnetByCidMap = results[0].value[0].properties.subnets.reduce(function(acc, o) {
+      acc[o.properties.addressPrefix] = o;
+      return acc;
+    }, {});
+
     var subnetMap = results[0].value[0].properties.subnets.reduce(function(acc, o) {
       acc[o.id] = o;
       return acc;
@@ -69,7 +74,7 @@ const armMeta = (resourceGroup) => {
       return acc;
     }, {});
 
-    return {vnet, subnetMap, nsgMap, pipMap, lbMap}
+    return {vnet, subnetMap, nsgMap, pipMap, lbMap, subnetByCidMap}
 
   })
 }
