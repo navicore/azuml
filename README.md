@@ -3,7 +3,8 @@ create diagrams for Azure subnets and NSGs
 
 add data to data, see `data/README.md`
 
-run `./nsg.js`
+run `npm install`
+run `node src/script.js -g SOME-RESOURCE-GROUP`
 
 png files and their source are created in `./out`
 

@@ -4,26 +4,19 @@
   "description": "generate azure network security diagrams from deployments",
   "main": "src/main.js",
   "scripts": {
-    "transpile": "node_modules/.bin/babel src/main.js --out-file jsx.js",
-    "shebang": "echo '#!/usr/bin/env node\n' $(cat jsx.js) > script.js",
-    "clean": "rm -f jsx.js script.js",
-    "prepack": "npm run clean && npm run transpile && npm run shebang",
     "test": "echo \"warning: no test specified\" && exit 0"
   },
   "bin": {
-    "azuml": "script.js"
+    "azuml": "src/script.js"
   },
   "author": "Ed Sweeney",
   "license": "MIT",
   "dependencies": {
     "azure-arm-network": "^2.0.0",
     "commander": "^2.11.0",
-    "ink": "^0.1.1",
     "ms-rest-azure": "^2.2.1",
     "shorthash": "0.0.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-plugin-transform-react-jsx": "^6.24.1"
   }
 }
