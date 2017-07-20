@@ -6,8 +6,8 @@ const sortSubnets = require('./util').sortSubnets
 const inetBox = () => {
   let result = `
 box "Internet" #LightGreen
-  actor "App User" as user1
-  actor "DEVOPS eng" as devops1
+  actor "App\\nUser" as user1
+  actor "DEVOPS\\nEngineer" as devops1
 end box
 `
   return result
