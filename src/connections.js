@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const sortSubnets = require('./util').sortSubnets
 const sh = require('shorthash');
 const makeDiagId = (id) => {

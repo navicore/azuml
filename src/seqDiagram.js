@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 const sh = require('shorthash')
 const makeSubnetConnections = require('./connections').default
 const sortSubnets = require('./util').sortSubnets
