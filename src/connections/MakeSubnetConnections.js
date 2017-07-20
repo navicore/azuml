@@ -31,16 +31,6 @@ const connectAllSubnets = (rule, armData, id) => {
   return result
 }
 
-const makeLbConnections = (rule, armData, id, subnet) => {
-  let result = ""
-  Object.values(armData.lbMap).forEach((lb) => {
-    const id = makeDiagId(lb.id)
-  })
-  console.log(`todo: allow from inet via lb`)
-
-  return result
-}
-
 const connectNic = (ipConfigId, rule, armData, id, subnet) => {
   let result = ""
   const nicId = ipConfigId.substring(0, ipConfigId.indexOf('/ipConfigur'))
@@ -91,8 +81,6 @@ const makePipConnections = (rule, armData, id, subnet) => {
   let result = ""
   Object.values(armData.pipMap).forEach((pip) => {
     const id = makeDiagId(pip.id)
-    console.log(`todo: allow from inet via pip`)
-    //console.log(JSON.stringify(pip, 0, 2))
     const ipConfigId = pip.properties.ipConfiguration.id
     if (ipConfigId.includes('networkInterfaces')) {
       result += connectNic(ipConfigId, rule, armData, id, subnet)
@@ -118,12 +106,10 @@ const makeSubnetConnections = (armData) => {
         // map to ALL other subnets
         result += connectAllSubnets(rule, armData, id)
       } else if (rule.properties.sourceAddressPrefix === '*') {
-        result += makeLbConnections(rule, armData, id, subnet)
         result += makePipConnections(rule, armData, id, subnet)
         result += connectAllSubnets(rule, armData, id)
       } else if (rule.properties.sourceAddressPrefix === 'INTERNET') {
         // map to pips and lbs
-        result += makeLbConnections(rule, armData, id, subnet)
         result += makePipConnections(rule, armData, id, subnet)
       } else {
         // handle cidr
