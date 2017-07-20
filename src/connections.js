@@ -76,12 +76,12 @@ const connectLb = (ipConfigId, rule, armData, id, subnet) => {
               const pipConn = `${pipId} -> ${lbId} : ${lbRule.name} (port ${lbRule.properties.frontendPort}) 
 `
               result += connectUser(pipId, lbRule.properties.frontendPort)
-              if (!result.includes(pipConn)) result += pipConn
+              if (!result.includes(pipConn)) result += pipConn  // draw pip connection
             })
             const subnetId = makeDiagId(subnet.id)
             const lbConn = `${subnetId} <- ${lbId} : ${rule.name} (port ${rule.properties.destinationPortRange}) 
 `
-            if (!result.includes(lbConn)) result += lbConn
+            if (!result.includes(lbConn)) result += lbConn  // draw load balancer connection
           })
         }
       })
@@ -126,10 +126,10 @@ const makeSubnetConnections = (armData) => {
         result += makePipConnections(rule, armData, id, subnet)
         result += connectAllSubnets(rule, armData, id)
       } else if (rule.properties.sourceAddressPrefix === 'INTERNET') {
-        // map to pips and lbs
+        // connect pips to subnets and lbs
         result += makePipConnections(rule, armData, id, subnet)
       } else {
-        // handle cidr
+        // map to other subnets that match the cidr pattern
         result += connectCidrSubnets(rule, armData, id)
       }
     })

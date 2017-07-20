@@ -89,10 +89,7 @@ const make = (armData) => {
   result += azurePrivateNetBox(armData.vnet, armData.subnetMap)
 
   result += activateLbs(armData.lbMap)
-
-  //result += makePipConnections(armData)
   result += makeSubnetConnections(armData)
-
   result += deActivateLbs(armData.lbMap)
 
   result += "\n@enduml\n"
