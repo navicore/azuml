@@ -3,6 +3,16 @@ Diagram Generator for Azure Subnets and NSGs
 
 Create diagrams based on ARM API calls of your deployed Azure network.
 
+## STATUS
+
+Works for my specific needs.
+
+Assumptions:
+
+* a single resource group with a single vnet
+* subnets have NSGs with explicit rules (default rules not yet evaluated)
+* expects load balancer rules (NAT rules not yet supported)
+
 ## PREREQS
 
 * node >= v7
@@ -26,7 +36,7 @@ png files and their source are created in `./out`
 
 ## TODOs
 
-* walk LBs to figure out connections from public
-* walk PIPs to figure out connections from public
-* sort subnets as bastion, public, ....., database, cicd via score of 1 to 5
+* outbound rules
+* option to expand all subnets to include VMs
+* option to expand a single subnet to include VMs
 
