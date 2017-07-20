@@ -98,7 +98,10 @@ const makeSubnetConnections = (armData) => {
     const id = makeDiagId(subnet.id)
     // todo: ensure there are explicit deny rules and/or sane default deny rules
     // iterate on rules
-    if (!subnet.properties.networkSecurityGroup) return
+    if (!subnet.properties.networkSecurityGroup) {
+      result += connectAllSubnets({name: "WARNING:\\nno subnet NSG\\nall ports open to vnet\\n", properties: {destinationPortRange: "*"}}, armData, id)
+      return //bail - this subnet has no NSG
+    }
     const nsg = armData.nsgMap[subnet.properties.networkSecurityGroup.id]
     const rules = nsg.properties.securityRules
     rules.filter(rule => rule.properties.access !== 'Deny').forEach(rule => {
