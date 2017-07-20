@@ -117,6 +117,10 @@ const makeSubnetConnections = (armData) => {
       return //bail - this subnet has no NSG
     }
     const nsg = armData.nsgMap[subnet.properties.networkSecurityGroup.id]
+    if (!nsg || ! nsg.properties.securityRules) {
+      console.log("WARNING, no nsg rules for " + subnet.properties.networkSecurityGroup.id)
+      return
+    }
     const rules = nsg.properties.securityRules
     rules.filter(rule => rule.properties.access !== 'Deny').forEach(rule => {
       if (rule.properties.sourceAddressPrefix === 'VirtualNetwork') {
