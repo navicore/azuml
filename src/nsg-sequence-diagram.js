@@ -42,12 +42,28 @@ end box
   return result
 }
 
+const sortSubnets = (subnets) => {
+  const score = (subnet) => {
+    if (subnet.name.includes('bastion')) return 0
+    if (subnet.name.includes('public')) return 1
+    if (subnet.name.includes('database')) return 3
+    if (subnet.name.includes('control')) return 4
+    if (subnet.name.includes('cicd')) return 5
+    return 3
+  }
+  return subnets.sort((a, b) => {
+    let s1 = score(a)
+    let s2 = score(b)
+    return s1 - s2
+  })
+}
+
 const azurePrivateNetBox = (vnet, subnetMap) => {
   let result = `
 box "Private Azure VNET ${vnet.name}" #LightBlue
 
 `
-  Object.values(subnetMap).forEach((subnet) => {
+  sortSubnets(Object.values(subnetMap)).forEach((subnet) => {
 
     const snid = makeDiagId(subnet.id)
     result += `  collections "${subnet.name} \\nSubnet" as ${snid}\n`
