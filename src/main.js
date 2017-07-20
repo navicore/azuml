@@ -2,8 +2,8 @@
 
 const fs = require('fs')
 const program = require('commander')
-const armMeta = require('./armMeta').default
-const diagram = require('./nsg-sequence-diagram').default
+const azure = require('./azure').default
+const diagram = require('./seqDiagram').default
 const { exec } = require('child_process');
 
 program
@@ -34,7 +34,7 @@ if (!program.group ||
   program.help()
 }
 
-armMeta(program.group).then((result) => {
+azure(program.group).then((result) => {
   const d = diagram(result)
   fs.mkdir("out", () => {
     fs.writeFile(`out/seq-${program.group}.uml`, d, function (err) {
