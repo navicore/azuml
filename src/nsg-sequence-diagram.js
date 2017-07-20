@@ -7,8 +7,8 @@ const sortSubnets = require('./util').sortSubnets
 const inetBox = () => {
   let result = `
 box "Internet" #LightGreen
-  actor "User App User" as user2
-  actor "DEVOPS eng" as user1
+  actor "User App User" as user1
+  actor "DEVOPS eng" as devops1
 end box
 `
   return result
@@ -91,7 +91,7 @@ const make = (armData) => {
 
   result += activateLbs(armData.lbMap)
 
-  result += makePipConnections(armData)
+  //result += makePipConnections(armData)
   result += makeSubnetConnections(armData)
 
   result += deActivateLbs(armData.lbMap)

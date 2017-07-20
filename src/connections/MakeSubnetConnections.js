@@ -33,6 +33,15 @@ const connectAllSubnets = (rule, armData, id) => {
   return result
 }
 
+const connectUser = (id, port) => {
+  if (`${port}`.includes("22"))
+    return `${id} <- devops1 : (port ${port}) 
+`
+  else 
+    return `${id} <- user1 : (port ${port}) 
+`
+}
+
 const connectNic = (ipConfigId, rule, armData, id, subnet) => {
   let result = ""
   const nicId = ipConfigId.substring(0, ipConfigId.indexOf('/ipConfigur'))
@@ -41,6 +50,7 @@ const connectNic = (ipConfigId, rule, armData, id, subnet) => {
     const subnetId = ipconfig.properties.subnet.id
     if (subnetId === subnet.id) {
       const subnetShortId = makeDiagId(subnet.id)
+      result += connectUser(id, rule.properties.destinationPortRange)
       result += `${subnetShortId} <- ${id} : ${rule.name} (port ${rule.properties.destinationPortRange}) 
 `
     }
@@ -65,6 +75,7 @@ const connectLb = (ipConfigId, rule, armData, id, subnet) => {
               const pipId = makeDiagId(frontendConfig.properties.publicIPAddress.id)
               const pipConn = `${pipId} -> ${lbId} : ${lbRule.name} (port ${lbRule.properties.frontendPort}) 
 `
+              result += connectUser(pipId, lbRule.properties.frontendPort)
               if (!result.includes(pipConn)) result += pipConn
             })
             const subnetId = makeDiagId(subnet.id)
