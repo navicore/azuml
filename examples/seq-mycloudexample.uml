@@ -1,0 +1,43 @@
+@startuml
+
+box "Internet" #LightGreen
+  actor "App\nUser" as user1
+  actor "DEVOPS\nEngineer" as devops1
+end box
+
+box "Azure Internet Boundary" #White
+
+  collections "mycloudexample-bastion-pip \nPublic IP" as id1FO4Xe
+  collections "user_apps_http_pip \nPublic IP" as id28lquV
+  control "my-http-lb \nLoad Balancer" as idZ4sTDC
+
+end box
+
+box "Private Azure VNET mycloudexample" #LightBlue
+
+  collections "mycloudexample-bastion \nSubnet" as id1DlfEG
+  collections "mycloudexample-public-nodes \nSubnet" as idZ2qxTdg
+  collections "mycloudexample-private-nodes \nSubnet" as idp3hlP
+  collections "mycloudexample-database \nSubnet" as idZMQkCd
+  collections "mycloudexample-cicd \nSubnet" as idmt34j
+
+end box
+
+activate idZ4sTDC
+id1FO4Xe <- devops1 : (port 22) 
+id1DlfEG <- id1FO4Xe : allow_ssh_inbound (port 22) 
+idZ2qxTdg <- id1DlfEG : allow_bastion_ssh (port 22) 
+id28lquV <- user1 : (port 80) 
+id28lquV -> idZ4sTDC : http (port 80) 
+idZ2qxTdg <- idZ4sTDC : allow_http_inbound (port 80) 
+id28lquV <- user1 : (port 443) 
+id28lquV -> idZ4sTDC : https (port 443) 
+idZ2qxTdg <- idZ4sTDC : allow_https_inbound (port 443) 
+idp3hlP <- idZ2qxTdg : allow_public_8080 (port 8080) 
+idp3hlP <- id1DlfEG : allow_bastion_ssh (port 22) 
+idZMQkCd <- id1DlfEG : allow_bastion_ssh (port 22) 
+idZMQkCd <- idp3hlP : allow_internal_cassandra (port 9042) 
+idmt34j <- id1DlfEG : allow_bastion_ssh (port 22) 
+deactivate idZ4sTDC
+
+@enduml
