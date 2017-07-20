@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var sh = require('shorthash');
+const sh = require('shorthash');
 const makeDiagId = (id) => {
       return 'id' + sh.unique(id)
 }
