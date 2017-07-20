@@ -68,28 +68,17 @@ const connectLb = (ipConfigId, rule, armData, id, subnet) => {
         const subnetId = nicIpConfig.properties.subnet.id
         if (subnetId === subnet.id) {
           lb.properties.loadBalancingRules.forEach(lbRule => {
+            const lbId = makeDiagId(lb.id)
             lb.properties.frontendIPConfigurations.forEach(frontendConfig => {
-              console.log(JSON.stringify(frontendConfig, 0, 2)) //get pip
-              const pipId = makeDiagId(frontendConfig.properties.publicIPAddress)
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              //bug is above, id is just 'id'
-              const lbId = makeDiagId(lb.id)
-              result += `${pipId} -> ${lbId} : ${rule.name} (port ${lbRule.properties.frontendPort}) 
+              const pipId = makeDiagId(frontendConfig.properties.publicIPAddress.id)
+              const pipConn = `${pipId} -> ${lbId} : ${lbRule.name} (port ${lbRule.properties.frontendPort}) 
 `
+              if (!result.includes(pipConn)) result += pipConn
             })
-            const subnetShortId = makeDiagId(subnet.id)
-            const newConn = `${subnetShortId} <- ${id} : ${rule.name} (port ${lbRule.properties.backendPort}) 
+            const subnetId = makeDiagId(subnet.id)
+            const lbConn = `${subnetId} <- ${lbId} : ${rule.name} (port ${rule.properties.destinationPortRange}) 
 `
-            if (!result.includes(newConn)) result += newConn
+            if (!result.includes(lbConn)) result += lbConn
           })
         }
       })
@@ -121,6 +110,7 @@ const makeSubnetConnections = (armData) => {
     const id = makeDiagId(subnet.id)
     // todo: ensure there are explicit deny rules and/or sane default deny rules
     // iterate on rules
+    if (!subnet.properties.networkSecurityGroup) return
     const nsg = armData.nsgMap[subnet.properties.networkSecurityGroup.id]
     const rules = nsg.properties.securityRules
     rules.filter(rule => rule.properties.access !== 'Deny').forEach(rule => {
@@ -142,7 +132,7 @@ const makeSubnetConnections = (armData) => {
     })
   })
 
-  return result
+  return Array.from(new Set(result.split('\n'))).join('\n') //no dupes
 }
 
 exports["default"] = makeSubnetConnections
