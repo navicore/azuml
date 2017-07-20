@@ -1,5 +1,5 @@
 const sh = require('shorthash')
-const makeSubnetConnections = require('./connections').default
+const connectSubnets = require('./connections/subnets').connect
 const sortSubnets = require('./util').sortSubnets
 
 const inetBox = () => {
@@ -88,7 +88,7 @@ const make = (armData) => {
   result += azurePrivateNetBox(armData.vnet, armData.subnetMap)
 
   result += activateLbs(armData.lbMap)
-  result += makeSubnetConnections(armData)
+  result += connectSubnets(armData)
   result += deActivateLbs(armData.lbMap)
 
   result += "\n@enduml\n"
