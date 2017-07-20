@@ -6,7 +6,7 @@ Automatically create diagrams based on ARM API calls of your deployed Azure netw
 The resulting sequence diagram shows what ports are open to internal and external domains,
 making it easy to quickly determine that the deployed system matches your intended design.
 
-Visually verify security policy - ie: if your policy is that all ssh access is via a bastion host, you'll
+Visually verify security policies - ie: if your policy is that all ssh access is via a bastion host, you'll
 visually verify via the  graphic that only the bastion host's port 22 is visible to the Internet.
 
 ## STATUS
