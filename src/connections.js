@@ -6,12 +6,12 @@ const makeDiagId = (id) => {
   return 'id' + sh.unique(id)
 }
 
-const matchSourceAddressPrefix = (prefix, source) => {
-  console.log(`todo: prefix ${prefix} source ${source}`)
-  return false
+const matchSourceAddressPrefix = (source, prefix) => {
+  //console.log(`todo: more sophisticated match: prefix ${prefix} source ${source}`)
+  return prefix === source
 }
 
-const connectCidSubnets = (rule, armData, id) => {
+const connectCidrSubnets = (rule, armData, id) => {
   let result = ""
   Object.values(armData.subnetMap).forEach((subnet) => {
     const sid = makeDiagId(subnet.id)
@@ -130,7 +130,7 @@ const makeSubnetConnections = (armData) => {
         result += makePipConnections(rule, armData, id, subnet)
       } else {
         // handle cidr
-        result += connectCidSubnets(rule, armData, id)
+        result += connectCidrSubnets(rule, armData, id)
       }
     })
   })
