@@ -1,3 +1,4 @@
+const assert = require('assert')
 const msRestAzure = require('ms-rest-azure')
 const AzureServiceClient = msRestAzure.AzureServiceClient
 
@@ -28,27 +29,24 @@ const armMeta = (resourceGroup) => {
     return client.sendRequest(options)
   })
 
-  const vnets = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    return listResources(vnetUrl)
+  const metaPromisses = [vnetUrl, nsgUrl, pipUrl, lbUrl, nicUrl].map(url => {
+    return msRestAzure.loginWithServicePrincipalSecret(
+      clientId,
+      secret,
+      domain
+    ).then((creds) => {
+      return listResources(url)
+    })
   })
 
-  const nsgs = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    return listResources(nsgUrl)
-  })
+  const reduceToMap = (o) => {
+    return o.reduce(function(acc, o) {
+      acc[o.id] = o;
+      return acc;
+    }, {});
+  }
 
-  const pips = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    return listResources(pipUrl)
-  })
-
-  const lbs = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    return listResources(lbUrl)
-  })
-
-  const nics = msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain).then((creds) => {
-    return listResources(nicUrl)
-  })
-
-  return Promise.all([vnets, nsgs, pips, lbs, nics]).then((results) => {
+  return Promise.all(metaPromisses).then((results) => {
 
     if (results[0].value.length !== 1) throw Error('Resource group must have a single VirtualNetowrk.')
 
@@ -59,30 +57,16 @@ const armMeta = (resourceGroup) => {
       return acc;
     }, {});
 
-    var subnetMap = results[0].value[0].properties.subnets.reduce(function(acc, o) {
-      acc[o.id] = o;
-      return acc;
-    }, {});
-
-    var nsgMap = results[1].value.reduce(function(acc, o) {
-      acc[o.id] = o;
-      return acc;
-    }, {});
-
-    var pipMap = results[2].value.reduce(function(acc, o) {
-      acc[o.id] = o;
-      return acc;
-    }, {});
-
-    var lbMap = results[3].value.reduce(function(acc, o) {
-      acc[o.id] = o;
-      return acc;
-    }, {});
-
-    var nicMap = results[4].value.reduce(function(acc, o) {
-      acc[o.id] = o;
-      return acc;
-    }, {});
+    var subnetMap = reduceToMap(results[0].value[0].properties.subnets)
+    assert(subnetMap)
+    var nsgMap = reduceToMap(results[1].value)
+    assert(nsgMap)
+    var pipMap = reduceToMap(results[2].value)
+    assert(pipMap)
+    var lbMap = reduceToMap(results[3].value)
+    assert(lbMap)
+    var nicMap = reduceToMap(results[4].value)
+    assert(nicMap)
 
     return {vnet, subnetMap, nsgMap, pipMap, lbMap, subnetByCidMap, nicMap}
 

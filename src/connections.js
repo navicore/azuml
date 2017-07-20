@@ -108,7 +108,6 @@ const makePipConnections = (rule, armData, id, subnet) => {
 const makeSubnetConnections = (armData) => {
   let result = ""
   sortSubnets(Object.values(armData.subnetMap)).forEach((subnet) => {
-    console.log("processing " + subnet.name)
     const id = makeDiagId(subnet.id)
     // todo: ensure there are explicit deny rules and/or sane default deny rules
     // iterate on rules
