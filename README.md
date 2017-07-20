@@ -53,4 +53,5 @@ png files and their source are created in `./out`
 * outbound rules
 * option to expand all subnets to include VMs
 * option to expand a single subnet to include VMs
+* ID generator should create IDs which are recognizable / meaningful (currently just hashes)
 
