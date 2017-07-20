@@ -1,7 +1,7 @@
 Diagram Generator for Azure Subnets and NSGs
 ----
 
-Automatically create [Plantuml](http://plantuml.com/) sequence diagrams based on ARM API calls of your deployed Azure network.
+Automatically create [Plantuml](http://plantuml.com/) sequence diagrams based on ARM API calls against your deployed Azure network.
 
 The resulting sequence diagram shows what ports are open to internal and external domains,
 making it easy to quickly determine that the deployed system matches your intended design.
