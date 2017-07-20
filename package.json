@@ -2,12 +2,12 @@
   "name": "azuml",
   "version": "1.0.0",
   "description": "generate azure network security diagrams from deployments",
-  "main": "src/script.js",
+  "main": "src/main.js",
   "scripts": {
     "test": "echo \"warning: no test specified\" && exit 0"
   },
   "bin": {
-    "azuml": "src/script.js"
+    "azuml": "src/main.js"
   },
   "author": "Ed Sweeney",
   "license": "MIT",

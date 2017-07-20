@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 const sh = require('shorthash')
-const makeSubnetConnections = require('./connections/MakeSubnetConnections').default
-const makePipConnections = require('./connections/MakePipConnections').default
+const makeSubnetConnections = require('./connections').default
 const sortSubnets = require('./util').sortSubnets
 
 const inetBox = () => {
   let result = `
 box "Internet" #LightGreen
-  actor "User App User" as user1
+  actor "App User" as user1
   actor "DEVOPS eng" as devops1
 end box
 `
