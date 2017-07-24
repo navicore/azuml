@@ -47,7 +47,7 @@ const armMeta = resourceGroup => {
   };
 
   return Promise.all(metaPromisses).then(results => {
-    if (results[0].value.length !== 1)
+    if (!results || !results[0].value || results[0].value.length !== 1)
       throw Error("Resource group must have a single VirtualNetowrk.");
 
     var vnet = results[0].value[0];
