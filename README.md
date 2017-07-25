@@ -11,9 +11,9 @@ visually verify via the  graphic that only the bastion host's port 22 is visible
 
 ## Example PlantUML Output
 
-![PlantUML](examples/seq-mycloudexample.png)
+![PlantUML](examples/seq-mycloud.png)
 
-See generated PlantUML code in [examples](examples/seq-mycloudexample.uml).
+See generated PlantUML code in [examples](examples/seq-mycloud.uml).
 
 ## STATUS
 

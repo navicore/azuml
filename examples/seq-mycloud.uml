@@ -1,0 +1,38 @@
+@startuml
+
+box "Internet" #LightGreen
+  actor "App\nUser" as user1
+  actor "DEVOPS\nEngineer" as devops1
+end box
+
+box "Azure Internet Boundary" #White
+
+  collections "mycloud-bastion-pip \nPublic IP" as idZ8GGdk
+
+end box
+
+box "Private Azure VNET mycloud" #LightBlue
+
+  collections "mycloud-bastion-subnet \nSubnet" as idZ8b1nD
+  collections "mycloud-public_nodes-subnet \nSubnet" as id1iwWyU
+  collections "mycloud-private_nodes-subnet \nSubnet" as idZ2lFNY6
+  collections "mycloud-database-subnet \nSubnet" as idZcqWru
+  collections "mycloud-cicd-subnet \nSubnet" as idnuLwH
+
+end box
+
+
+note over idZ8b1nD: mycloud-bastion-nsg
+idZ8GGdk <- devops1 : (port 22) 
+idZ8b1nD <- idZ8GGdk : allow_ssh_in_from_inet (port 22) 
+note over id1iwWyU: mycloud-public_nodes-nsg
+id1iwWyU <- idZ8b1nD : allow_ssh_in_from_bastion (port 22) 
+note over idZ2lFNY6: mycloud-private_nodes-nsg
+idZ2lFNY6 <- idZ8b1nD : allow_ssh_in_from_bastion (port 22) 
+note over idZcqWru: mycloud-database-nsg
+idZcqWru <- idZ8b1nD : allow_https_from_10.0.1.0 (port 443) 
+idZcqWru <- idZ8b1nD : allow_ssh_in_from_bastion (port 22) 
+note over idnuLwH: mycloud-cicd-nsg
+idnuLwH <- idZ8b1nD : allow_ssh_in_from_bastion (port 22) 
+idnuLwH <- idZ8b1nD : allow_http_8080_from_10.0.1.0 (port 8080) 
+@enduml
