@@ -66,6 +66,11 @@ const connectSubnets = armData => {
       return;
     }
     const rules = nsg.properties.securityRules;
+
+    result += `
+note over ${id}: ${nsg.name}
+`
+
     rules.filter(rule => rule.properties.access !== "Deny").forEach(rule => {
       if (rule.properties.sourceAddressPrefix === "VirtualNetwork") {
         // map to ALL other subnets
