@@ -21,6 +21,11 @@ box "Private Azure VNET mycloud" #LightBlue
 
 end box
 
+note over idZ8b1nD #white: 10.0.1.0/24
+note over id1iwWyU #white: 10.0.3.0/24
+note over idZ2lFNY6 #white: 10.0.2.0/24
+note over idZcqWru #white: 10.0.4.0/24
+note over idnuLwH #white: 10.0.5.0/24
 
 note over idZ8b1nD: mycloud-bastion-nsg
 idZ8GGdk <- devops1 : (port 22) 

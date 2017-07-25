@@ -51,6 +51,11 @@ box "Private Azure VNET ${vnet.name}" #LightBlue
 end box
 
 `;
+  sortSubnets(Object.values(subnetMap)).forEach(subnet => {
+    const snid = makeDiagId(subnet.id);
+    result += `note over ${snid} #white: ${subnet.properties.addressPrefix}\n`;
+  });
+
   return result;
 };
 
