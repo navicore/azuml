@@ -71,14 +71,14 @@ const connectSubnets = armData => {
 note over ${id}: ${nsg.name}
 `
 
-    rules.filter(rule => rule.properties.access !== "Deny").forEach(rule => {
-      if (rule.properties.sourceAddressPrefix === "VirtualNetwork") {
+    rules.filter(rule => rule.properties.access.toUpperCase() !== "DENY").forEach(rule => {
+      if (rule.properties.sourceAddressPrefix.toUpperCase() === "VIRTUALNETWORK") {
         // map to ALL other subnets
         result += connectAllSubnets(rule, armData, id);
       } else if (rule.properties.sourceAddressPrefix === "*") {
         result += makePipConnections(rule, armData, id, subnet);
         result += connectAllSubnets(rule, armData, id);
-      } else if (rule.properties.sourceAddressPrefix === "INTERNET") {
+      } else if (rule.properties.sourceAddressPrefix.toUpperCase() === "INTERNET") {
         // connect pips to subnets and lbs
         result += makePipConnections(rule, armData, id, subnet);
       } else {
