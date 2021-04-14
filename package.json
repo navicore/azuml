@@ -17,6 +17,5 @@
     "ms-rest-azure": "^2.2.1",
     "shorthash": "0.0.2"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
